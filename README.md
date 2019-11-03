@@ -5,4 +5,9 @@
 [OkHttp]()<br>
 fastjson<br>
 [Mybatis3中文文档](https://mybatis.org/mybatis-3/zh/getting-started.html)<br>
-[spring boot文档](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html)
+[spring boot文档](https://docs.spring.io/spring-boot/docs/2.2.0.RC1/reference/htmlsingle/)<br>
+[]()
+
+##代码解说
+ PaginationDTO paginationDTO = questionService.list(page, size);
+ 上行为IndexController内的代码,主要是为了在后端实现分页功能,但现在分页功能不做了，传入的两个参数已无实际作用，望周知。

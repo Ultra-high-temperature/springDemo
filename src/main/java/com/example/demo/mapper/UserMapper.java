@@ -15,6 +15,10 @@ public interface UserMapper {
 
     @Select("SELECT * FROM user WHERE token = #{token}")
     User findByToken(@Param("token") String token);
+
+    @Select("SELECT * FROM user WHERE id = #{id}")
+    User findByID(@Param("id") int id);
+    //User表内，用户ID唯一标记一个用户
 }
 //{
 //private String account_id;

@@ -20,16 +20,12 @@ public class AuthorizeController {
 
     @Value("${github.Redirect_uri}")
     private String Redirect_uri;
-
     @Value("${github.Client_id}")
     private String Client_id;
-
     @Value("${github.Client_secret}")
     private String Client_secret;
-
     @Autowired
     private GithubProvider githubProvider;//把写了@Component的类自动实例化
-
     @Autowired
     private UserMapper userMapper;
 
@@ -50,7 +46,7 @@ public class AuthorizeController {
         //获取access_token
         GithubUser githubUser=githubProvider.getUser(access_token);
         //根据已获得的access_token获取用户类
-        if(githubUser!=null){
+        if(githubUser!=null && githubUser.getId()!=null){
             User user=new User();
             String token=UUID.randomUUID().toString();
             user.setToken(token);
