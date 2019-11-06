@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.PaginationDTO;
-import com.example.demo.dto.QuestionDTO;
-import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
-import com.example.demo.model.Question;
 import com.example.demo.model.User;
 import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class IndexController {
@@ -26,25 +22,26 @@ public class IndexController {
     private UserMapper userMapper;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request,
+    public String index(
+            HttpServletRequest request,
                         Model model,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
                         @RequestParam(name = "size", defaultValue = "5") Integer size) {
-//        String s = System.getProperty("file.encoding");
-//        System.out.println(s);
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null)
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                        //将User对象放入Session
-                    }
-                    break;
-                }
-            }
+
+//        Cookie[] cookies = request.getCookies();
+//        if (cookies != null)
+//            for (Cookie cookie : cookies) {
+//                if (cookie.getName().equals("token")) {
+//                    String token = cookie.getValue();
+//                    User user = userMapper.findByToken(token);
+//                    if (user != null) {
+//                        request.getSession().setAttribute("user", user);
+//                        //将User对象放入Session
+//                    }
+//                    break;
+//                }
+//            }
+
         PaginationDTO paginationDTO = questionService.list(page, size);//两个无意义参数
         model.addAttribute("paginationDTO", paginationDTO);
         return "index";

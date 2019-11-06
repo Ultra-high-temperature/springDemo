@@ -4,6 +4,7 @@ package com.example.demo.dto;
 import com.example.demo.model.User;
 
 public class QuestionDTO {
+    private Integer id;
     private String title;
     private String description;
     private Long gmt_create;
@@ -14,6 +15,14 @@ public class QuestionDTO {
     private int view_count=0;
     private String tag;
     private User user;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

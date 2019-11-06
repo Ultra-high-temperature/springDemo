@@ -22,7 +22,7 @@ public class QuestionService {
 
     public PaginationDTO list(Integer page, Integer size) {//函数的两个参数是用于实现页面分页功能的，但是现在不做了
         Integer offset = size * (page - 1);
-        List<Question> questionList = questionMapper.list(offset,size);//两个参数无无意义
+        List<Question> questionList = questionMapper.list(offset, size);//两个参数无无意义
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -39,6 +39,16 @@ public class QuestionService {
         Integer questionCount = questionMapper.questionCount();
 
         return paginationDTO;
+    }
+
+    public QuestionDTO getById(Integer id) {
+
+        QuestionDTO questionDTO = new QuestionDTO();
+        Question question = questionMapper.getById(id);
+        BeanUtils.copyProperties(question, questionDTO);
+        User user = userMapper.findByID(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
     }
     //当一个请求需要组装Question和User时，就需要Service充当中间层
 

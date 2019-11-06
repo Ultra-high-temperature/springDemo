@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 public class Question {
+    private Integer id;
     private String title;
     private String description;
     private Long gmt_create;
@@ -10,6 +11,14 @@ public class Question {
     private int like_count=0;
     private int view_count=0;
     private String tag;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
