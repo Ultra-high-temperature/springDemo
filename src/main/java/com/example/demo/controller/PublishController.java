@@ -1,13 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.QuestionDTO;
 import com.example.demo.mapper.QuestionMapper;
-import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Question;
 import com.example.demo.model.User;
+import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,10 +20,22 @@ import javax.servlet.http.HttpServletRequest;
 public class PublishController {
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private QuestionService questionService;
 
     @GetMapping("/publish")
     public String publish() {
+        return "publish";
+    }
+
+    @GetMapping("/publish/{id}")
+    public String edit(
+            Model model,
+            @PathVariable(name = "id") Integer id) {
+        QuestionDTO question = questionService.getById(id);
+        model.addAttribute("title",question.getTitle());
+        model.addAttribute("description",question.getDescription());
+        model.addAttribute("tag",question.getTag());
+        model.addAttribute("id",question.getId());
         return "publish";
     }
 
@@ -30,27 +44,10 @@ public class PublishController {
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("tag") String tag,
+            @RequestParam(value = "id",required = false) Integer id,
             HttpServletRequest request,
             Model model) {
-
-//        Cookie[] cookies=request.getCookies();
-//        User user = null;
-//        if(cookies!=null){
-//            for (Cookie cookie : cookies) {
-//                if (cookie.getName().equals("token")) {
-//                    String token = cookie.getValue();
-//                    user= userMapper.findByToken(token);
-//                    if (user != null) {
-//                        request.getSession().setAttribute("user", user);
-//                        //将User对象放入Session
-//                    }
-//                    break;
-//                }
-//            }
-//        }
-//
         User user= (User) request.getSession().getAttribute("user");
-
         if (user == null) {
             model.addAttribute("error", "you have not login");
             return "publish";
@@ -59,11 +56,11 @@ public class PublishController {
         question.setTag(tag);
         question.setTitle(title);
         question.setDescription(description);
-        question.setGmt_create(System.currentTimeMillis());
-        question.setGmt_modified(question.getGmt_create());
         question.setCreator(user.getId());
         //user表内自增的id指的是用户ID
-        questionMapper.create(question);
+        question.setId(id);
+        //根据ID是否存在决定是新增还是更新question
+        questionService.createOrUpdate(question);
         return "redirect:/";
     }
 }

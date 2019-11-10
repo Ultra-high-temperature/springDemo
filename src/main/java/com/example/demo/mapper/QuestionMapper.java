@@ -24,4 +24,7 @@ public interface QuestionMapper {
 
     @Select("select * from question where id =#{id}")
     Question getById(Integer id);
+
+    @Select("UPDATE question SET title = #{title}, description = #{description}, tag = #{tag}, gmt_modified = #{gmt_modified} WHERE id = #{id}")
+    void update(Question question);
 }
