@@ -27,4 +27,8 @@ public interface QuestionMapper {
 
     @Select("UPDATE question SET title = #{title}, description = #{description}, tag = #{tag}, gmt_modified = #{gmt_modified} WHERE id = #{id}")
     void update(Question question);
+
+
+    @Select("UPDATE question SET view_count = view_count+1 WHERE id = #{id}")
+    void updateView(Integer id);
 }

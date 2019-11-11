@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired
     private UserMapper userMapper;
-    public void createOrUpdata(User user) {
+    public void createOrUpdate(User user) {
         User db_user=userMapper.findByAccount_id(user.getAccount_id());
         if (db_user==null){ //判断数据库内是否存在对应的用户记录
             //不存在则插入

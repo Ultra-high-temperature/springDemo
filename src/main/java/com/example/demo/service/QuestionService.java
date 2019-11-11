@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.PaginationDTO;
 import com.example.demo.dto.QuestionDTO;
+import com.example.demo.exception.CustomException;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Question;
@@ -10,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.beans.Customizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class QuestionService {
         }
         paginationDTO.setQuestionDTOs(questionDTOList);
 
-        Integer questionCount = questionMapper.questionCount();
+        Integer questionCount = questionMapper.questionCount();//用于分页的废弃代码
 
         return paginationDTO;
     }
@@ -45,6 +47,9 @@ public class QuestionService {
 
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.getById(id);
+        if(question==null){
+            throw new CustomException("你找的问题不存在");
+        }
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.findByID(question.getCreator());
         questionDTO.setUser(user);
@@ -53,15 +58,18 @@ public class QuestionService {
 
     public void createOrUpdate(Question question) {
         if(question.getId()==null){//新增
-            questionMapper.create(question);
             question.setGmt_create(System.currentTimeMillis());
             question.setGmt_modified(question.getGmt_create());
+            questionMapper.create(question);
         }
         else {//更新
             question.setGmt_modified(System.currentTimeMillis());
             questionMapper.update(question);
         }
     }
-    //当一个请求需要组装Question和User时，就需要Service充当中间层
 
+    public void incView(Integer id) {
+        questionMapper.updateView(id);
+    }
+    //当一个请求需要组装Question和User时，就需要Service充当中间层
 }

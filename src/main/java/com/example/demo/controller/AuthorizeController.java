@@ -57,7 +57,7 @@ public class AuthorizeController {
             user.setAccount_id(githubUser.getId().toString());
             user.setLogin_name(githubUser.getLogin());
             //user赋值
-            userService.createOrUpdata(user);
+            userService.createOrUpdate(user);
             //根据用户是否存在，决定进行更新或者插入操作
             response.addCookie(new Cookie("token", token));
             return "redirect:/";
