@@ -9,6 +9,7 @@ import com.example.demo.model.Comment;
 import com.example.demo.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -19,6 +20,8 @@ public class CommentService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Transactional//标于类前时, 标示类中所有方法都进行事物处理
+    //默认是有事务加入事务，没有就新建事务
     public void insert(Comment comment) {
         if (comment.getParent_id() == null || comment.getParent_id() == 0) {
             throw new CustomException(CustomErrorCode.TARGET_PARAM_NOT_FOUND);

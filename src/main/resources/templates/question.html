@@ -10,6 +10,7 @@
 
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/community.js"></script>
 
 
 </head>
@@ -21,22 +22,53 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 col-xs-12">
-            <h3><span th:text="${questionDTO.getTitle()}"></span></h3>
-            <span class="text-desc">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+                <h3><span th:text="${questionDTO.getTitle()}"></span></h3>
+                <span class="text-desc">
                 作者：<span th:text="${questionDTO.getUser().getLogin_name()}"></span> |
                 <span th:text="${questionDTO.getView_count()}"></span>次浏览 |
                 发布时间: <span th:text="${#dates.format(questionDTO.gmt_create,'yyyy-MM-dd HH:mm')}"></span>
             </span>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+                    <span th:text="${questionDTO.getDescription()}"></span>
+                </div>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+                    <a th:href="@{'/publish/'+${questionDTO.getId()}}"
+                       th:if="${session.user!=null&&session.user.getId()==questionDTO.getCreator()}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"/>编辑
+                    </a>
+                </div>
+            </div>
+
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
-                <span th:text="${questionDTO.getDescription()}"></span>
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <img class="media-object" src="...">
+                        <!--图片没配置-->
+                    </div>
+                    <div class="media-body">
+                        <a th:href="@{'/profile/'+${session.user.getId()}}">
+                            <span th:text="${session.user.getLogin_name()}"></span>
+                        </a>
+                    </div>
+                    <div class="media-right">
+                        <a href="...">规则</a>
+                    </div>
+                </div>
+                <br>
+                <input type="hidden" name="question_id" th:value="${questionDTO.getId()}"/>
+                <input type="hidden" name="id" th:value="${id}">
+                <textarea class="form-control" rows="15"></textarea>
+<!--                <div class="media-body">   </div>-->
+                <div class="container-fluid main">
+                    <button type="button" class="btn btn-success btn-publish" onclick="post()">回复</button>
+                </div>
             </div>
-            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
-                <a th:href="@{'/publish/'+${questionDTO.getId()}}" th:if="${session.user!=null&&session.user.getId()==questionDTO.getCreator()}">
-                    <span class="glyphicon glyphicon-edit" aria-hidden="true"/>编辑
-                </a>
-            </div>
+
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
