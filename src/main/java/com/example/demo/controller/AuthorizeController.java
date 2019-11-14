@@ -27,8 +27,6 @@ public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;//把写了@Component的类自动实例化
     @Autowired
-    private UserMapper userMapper;
-    @Autowired
     private UserService userService;
 
     @GetMapping("/callback")
@@ -59,7 +57,10 @@ public class AuthorizeController {
             //user赋值
             userService.createOrUpdate(user);
             //根据用户是否存在，决定进行更新或者插入操作
-            response.addCookie(new Cookie("token", token));
+            Cookie cookie=new Cookie("token", token);
+            cookie.setMaxAge(365*24*60*60);
+            //cookie设置存活时间，若不设置，则关闭后删除cookie
+            response.addCookie(cookie);
             return "redirect:/";
             //重定向此界面
         } else {

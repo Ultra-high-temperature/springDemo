@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.PaginationDTO;
 import com.example.demo.dto.QuestionDTO;
+import com.example.demo.exception.CustomErrorCode;
 import com.example.demo.exception.CustomException;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
@@ -48,7 +49,7 @@ public class QuestionService {
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.getById(id);
         if(question==null){
-            throw new CustomException("你找的问题不存在");
+            throw new CustomException(CustomErrorCode.QUESTION_NOT_FOUND);
         }
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.findByID(question.getCreator());
@@ -67,7 +68,6 @@ public class QuestionService {
             questionMapper.update(question);
         }
     }
-
     public void incView(Integer id) {
         questionMapper.updateView(id);
     }

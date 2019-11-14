@@ -12,7 +12,6 @@ public class ProfileController {//个人资料控制器，做不完了，跳了 
                           Model model){
         if ("questions".equals(action)){
             model.addAttribute("section","questions");
-
         }
         return "profile";
     }
