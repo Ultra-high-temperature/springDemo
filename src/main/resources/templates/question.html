@@ -44,7 +44,7 @@
             </div>
 
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12" th:id="comment_section">
                 <div class="media">
                     <div class="media-left media-middle">
                         <img class="media-object" src="...">
@@ -62,7 +62,7 @@
                 <br>
                 <input type="hidden" name="question_id" th:value="${questionDTO.getId()}"/>
                 <input type="hidden" name="id" th:value="${id}">
-                <textarea class="form-control" rows="15"></textarea>
+                <textarea class="form-control" rows="15" th:id="content"></textarea>
 <!--                <div class="media-body">   </div>-->
                 <div class="container-fluid main">
                     <button type="button" class="btn btn-success btn-publish" onclick="post()">回复</button>
