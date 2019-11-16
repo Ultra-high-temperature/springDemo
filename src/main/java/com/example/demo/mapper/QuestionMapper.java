@@ -15,7 +15,7 @@ public interface QuestionMapper {
     public void create(Question question);
 
 //    @Select("select * from question limit #{offset},#{size}")//带分页的版本
-    @Select("select * from question")
+    @Select("select * from question order by gmt_modified desc")
 //不带分页的版本
     List<Question> list(Integer offset, Integer size);
 

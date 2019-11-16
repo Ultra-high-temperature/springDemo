@@ -73,7 +73,7 @@ public class CommentService {
             BeanUtils.copyProperties(comment, commentDTO);
             commentDTO.setUser(user);
             commentDTOList.add(commentDTO);
-
+            commentDTO=new CommentDTO();
             List<Comment> commentList2=commentMapper.findByParentId(Math.toIntExact(comment.getId()));
             //找到回复评论的评论； 根据此评论的id，寻找 回复此评论的 评论
             for (Comment comment2:commentList2){
@@ -81,6 +81,7 @@ public class CommentService {
                 BeanUtils.copyProperties(comment2, commentDTO);
                 commentDTO.setUser(user2);
                 commentDTOList.add(commentDTO);
+                commentDTO=new CommentDTO();
             }
         }
 

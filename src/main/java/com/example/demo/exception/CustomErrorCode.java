@@ -7,6 +7,7 @@ public enum CustomErrorCode implements ICustomErrorCode{
     NO_LOGIN(2003,"未登录，不能进行评论,请先登录"),
     TYPE_PARAM_WRONG(2004,"评论类型错误"),
     COMMENT_NOT_FOUND(2005,"评论不存在"),
+    CONTENT_IS_EMPTY(2006,"评论内容为空"),
     ;
 
     private Integer code;
