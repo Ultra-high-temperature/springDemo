@@ -42,15 +42,42 @@
                     </a>
                 </div>
             </div>
+            <!--            问题内容及编辑-->
 
+
+            <h3>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${questionDTO.getComment_count()}"/>个回复
+            </h3>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12" th:each="commentDTO:${commentDTOList}">
+                <hr>
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <img class="media-object" src="..."><!--图片没配置-->
+                    </div>
+                    <div class="media-body">
+                        <a th:href="@{'/profile/'+${commentDTO.getUser().getId()}}">
+                            <span th:text="${commentDTO.getUser().getLogin_name()}"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+                    <span th:text="${commentDTO.getContent()}"></span>
+                </div>
+                <div>
+                    &nbsp;&nbsp;&nbsp;<button class="glyphicon glyphicon-thumbs-up active"></button>
+                    &nbsp;&nbsp;&nbsp;<button class="glyphicon glyphicon-thumbs-down active"></button>
+                    &nbsp;&nbsp;&nbsp;<button class="glyphicon glyphicon-comment active"></button>
+                    <span class="pull-right" th:text="${#dates.format(commentDTO.getGmt_create(),'yyyy-MM-dd')}"></span>
+                </div>
+            </div>
+            <!--            回复列表-->
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12" th:id="comment_section">
                 <div class="media" th:if="${session.user!=null}">
                     <div class="media-left media-middle">
-                        <img class="media-object" src="...">
-                        <!--图片没配置-->
+                        <img class="media-object" src="..."><!--图片没配置-->
                     </div>
-                    <div class="media-body" >
+                    <div class="media-body">
                         <a th:href="@{'/profile/'+${session.user.getId()}}">
                             <span th:text="${session.user.getLogin_name()}"></span>
                         </a>
@@ -63,12 +90,12 @@
                 <input type="hidden" name="question_id" th:value="${questionDTO.getId()}"/>
                 <input type="hidden" name="id" th:value="${id}">
                 <textarea class="form-control" rows="15" th:id="content"></textarea>
-<!--                <div class="media-body">   </div>-->
+                <!--                <div class="media-body">   </div>-->
                 <div class="container-fluid main">
                     <button type="button" class="btn btn-success btn-publish" onclick="post()">回复</button>
                 </div>
             </div>
-
+            <!--            简略个人信息及回复框体-->
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
@@ -90,6 +117,7 @@
                 <h4>相关问题</h4>
             </div>
         </div>
+        <!--        右边的东西-->
     </div>
 </div>
 

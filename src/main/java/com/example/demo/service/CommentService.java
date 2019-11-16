@@ -1,15 +1,24 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.CommentDTO;
 import com.example.demo.enums.CommentTypeEnum;
 import com.example.demo.exception.CustomErrorCode;
 import com.example.demo.exception.CustomException;
 import com.example.demo.mapper.CommentMapper;
 import com.example.demo.mapper.QuestionMapper;
+import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Comment;
 import com.example.demo.model.Question;
+import com.example.demo.model.User;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -19,6 +28,9 @@ public class CommentService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Transactional//标于类前时, 标示类中所有方法都进行事物处理
     //默认是有事务加入事务，没有就新建事务
@@ -31,7 +43,8 @@ public class CommentService {
         }
         if(comment.getType()==CommentTypeEnum.COMMENT.getType()){
             //回复评论
-            Comment db_comment=commentMapper.findByParentId(comment.getParent_id());
+            Comment db_comment=commentMapper.findCommentById(comment.getParent_id());
+            //Parent_id即为上一级回复的id,此处需确认上一级回复存在
             if(db_comment==null){
                 throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
             }
@@ -46,5 +59,31 @@ public class CommentService {
             commentMapper.insert(comment);
             questionMapper.updateComment(db_question.getId());
         }
+    }
+
+    public List<CommentDTO> ListByQuestionId(Integer id) {
+        //id为questionId
+        List<CommentDTO> commentDTOList= new ArrayList<>();
+
+        List<Comment> commentList=commentMapper.findByParentId(id);
+        //找到回复问题的评论
+        CommentDTO commentDTO=new CommentDTO();
+        for (Comment comment:commentList){
+            User user= userMapper.findByID(comment.getCommentator());
+            BeanUtils.copyProperties(comment, commentDTO);
+            commentDTO.setUser(user);
+            commentDTOList.add(commentDTO);
+
+            List<Comment> commentList2=commentMapper.findByParentId(Math.toIntExact(comment.getId()));
+            //找到回复评论的评论； 根据此评论的id，寻找 回复此评论的 评论
+            for (Comment comment2:commentList2){
+                User user2= userMapper.findByID(comment2.getCommentator());
+                BeanUtils.copyProperties(comment2, commentDTO);
+                commentDTO.setUser(user2);
+                commentDTOList.add(commentDTO);
+            }
+        }
+
+        return commentDTOList;
     }
 }
