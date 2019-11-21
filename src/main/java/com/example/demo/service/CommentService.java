@@ -61,30 +61,22 @@ public class CommentService {
         }
     }
 
-    public List<CommentDTO> ListByQuestionId(Integer id) {
+    public List<CommentDTO> ListByQuestionId(Integer id,Integer type) {
         //id为questionId
         List<CommentDTO> commentDTOList= new ArrayList<>();
 
         List<Comment> commentList=commentMapper.findByParentId(id);
-        //找到回复问题的评论
+        //找到所有的评论
         CommentDTO commentDTO=new CommentDTO();
         for (Comment comment:commentList){
-            User user= userMapper.findByID(comment.getCommentator());
-            BeanUtils.copyProperties(comment, commentDTO);
-            commentDTO.setUser(user);
-            commentDTOList.add(commentDTO);
-            commentDTO=new CommentDTO();
-            List<Comment> commentList2=commentMapper.findByParentId(Math.toIntExact(comment.getId()));
-            //找到回复评论的评论； 根据此评论的id，寻找 回复此评论的 评论
-            for (Comment comment2:commentList2){
-                User user2= userMapper.findByID(comment2.getCommentator());
-                BeanUtils.copyProperties(comment2, commentDTO);
-                commentDTO.setUser(user2);
+            if(comment.getType()==type){//对比检索出来的是否是所需要的类型
+                User user= userMapper.findByID(comment.getCommentator());
+                BeanUtils.copyProperties(comment, commentDTO);
+                commentDTO.setUser(user);
                 commentDTOList.add(commentDTO);
                 commentDTO=new CommentDTO();
             }
         }
-
         return commentDTOList;
     }
 }

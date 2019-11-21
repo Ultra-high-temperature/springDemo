@@ -44,10 +44,10 @@
             </div>
             <!--            问题内容及编辑-->
 
-
             <h3>
                 &nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${questionDTO.getComment_count()}"/>个回复
             </h3>
+
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12" th:each="commentDTO:${commentDTOList}">
                 <hr>
                 <div class="media">
@@ -66,11 +66,50 @@
                 <div>
                     &nbsp;&nbsp;&nbsp;<button class="glyphicon glyphicon-thumbs-up active"></button>
                     &nbsp;&nbsp;&nbsp;<button class="glyphicon glyphicon-thumbs-down active"></button>
-                    &nbsp;&nbsp;&nbsp;<button class="glyphicon glyphicon-comment active"></button>
+                    &nbsp;&nbsp;&nbsp;<button class="glyphicon glyphicon-comment active" th:data-id="${commentDTO.id}"
+                                              onclick="collapseComments(this)"></button>
                     <span class="pull-right" th:text="${#dates.format(commentDTO.getGmt_create(),'yyyy-MM-dd')}"></span>
+                </div>
+
+                <div class="collapse" th:id="${'comment-'+commentDTO.id}">
+
+
+                   沙雕作者不想写这鬼前端界面了,要看显示的自己用postman<br>
+                    get 相对路径：  <span th:text="${'/comment/'+commentDTO.id}"/>
+<!--                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12" th:id="${'comment-body-'+commentDTO.id}">&lt;!&ndash;遍历二级评论列表&ndash;&gt;-->
+<!--                        <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12 col-xs-12"></div>-->
+<!--                        &lt;!&ndash;                  上为占位符&ndash;&gt;-->
+<!--                        <div class="media col-lg-11 col-md-12 col-sm-12 col-xs-12 col-xs-12">-->
+<!--                            <div class="media-left media-middle">-->
+<!--                                <img class="media-object" src="...">&lt;!&ndash;图片没配置&ndash;&gt;-->
+<!--                            </div>-->
+<!--                            <div class="media-body">-->
+<!--                                <a th:href="@{'/profile/'+${commentDTO.getUser().getId()}}">-->
+<!--                                    <span th:text="${commentDTO.getUser().getLogin_name()}"></span>-->
+<!--                                </a>-->
+<!--                            </div>-->
+
+<!--                        </div>-->
+<!--                        &lt;!&ndash;                    上为测试数据&ndash;&gt;-->
+<!--                    </div>-->
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+                        <div class="col-lg-12">
+                            <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12 col-xs-12"></div>
+                            <div class="input-group col-lg-11 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+                                <input type="text" class="form-control" placeholder="输入回复内容"
+                                       th:id="${'input-'+commentDTO.id}">
+                                <span class="input-group-btn">
+        <button class="btn btn-default" type="button" onclick="comment(this)" th:data-id="${commentDTO.id}">回复</button>
+      </span>
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </div>
+                    <!--回复框体                -->
                 </div>
             </div>
             <!--            回复列表-->
+
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12" th:id="comment_section">
                 <div class="media" th:if="${session.user!=null}">
