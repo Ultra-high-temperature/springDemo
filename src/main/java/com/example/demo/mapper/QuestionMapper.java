@@ -33,4 +33,7 @@ public interface QuestionMapper {
 
     @Select("UPDATE question SET comment_count = comment_count+1 WHERE id = #{id}")
     void updateComment(Integer id);
+
+    @Select("SELECT * FROM question WHERE tag REGEXP #{split}")
+    List<QuestionDTO> findAboutQuestion(String split);
 }

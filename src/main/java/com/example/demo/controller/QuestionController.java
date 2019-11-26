@@ -28,7 +28,9 @@ public class QuestionController {
         List<CommentDTO> commentDTOList=commentService.ListByQuestionId(id, CommentTypeEnum.QUESTION.getType());
         questionService.incView(id);
         QuestionDTO questionDTO = questionService.getById(id);
+        List<QuestionDTO> relatedQuest=questionService.findRelatedQuestion(questionDTO.getTag());
         model.addAttribute("questionDTO",questionDTO);
+        model.addAttribute("relatedQuest",relatedQuest);
         model.addAttribute("commentDTOList",commentDTOList);
         return "question";
     }

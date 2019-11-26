@@ -13,8 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.beans.Customizer;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -72,4 +76,11 @@ public class QuestionService {
         questionMapper.updateView(id);
     }
     //当一个请求需要组装Question和User时，就需要Service充当中间层
+
+    public List<QuestionDTO> findRelatedQuestion(String tags){
+        String[] split = tags.split(";");
+        String collect = Arrays.stream(split).collect(Collectors.joining("||"));
+        List<QuestionDTO> aboutQuestByTag =questionMapper.findAboutQuestion( "Spring|Java" );
+        return aboutQuestByTag;
+    }
 }

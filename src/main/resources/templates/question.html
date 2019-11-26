@@ -35,6 +35,13 @@
                     <span th:text="${questionDTO.getDescription()}"></span>
                 </div>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+                <span th:each="tag:${questionDTO.getTag().split(';')}">
+                    <span class="label label-info glyphicon glyphicon-tag" th:text="${tag}    "></span>
+                </span>
+                </div><br>
+
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
                     <a th:href="@{'/publish/'+${questionDTO.getId()}}"
                        th:if="${session.user!=null&&session.user.getId()==questionDTO.getCreator()}">
@@ -72,27 +79,8 @@
                 </div>
 
                 <div class="collapse" th:id="${'comment-'+commentDTO.id}">
-
-
-                   沙雕作者不想写这鬼前端界面了,要看显示的自己用postman<br>
-                    get 相对路径：  <span th:text="${'/comment/'+commentDTO.id}"/>
-<!--                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12" th:id="${'comment-body-'+commentDTO.id}">&lt;!&ndash;遍历二级评论列表&ndash;&gt;-->
-<!--                        <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12 col-xs-12"></div>-->
-<!--                        &lt;!&ndash;                  上为占位符&ndash;&gt;-->
-<!--                        <div class="media col-lg-11 col-md-12 col-sm-12 col-xs-12 col-xs-12">-->
-<!--                            <div class="media-left media-middle">-->
-<!--                                <img class="media-object" src="...">&lt;!&ndash;图片没配置&ndash;&gt;-->
-<!--                            </div>-->
-<!--                            <div class="media-body">-->
-<!--                                <a th:href="@{'/profile/'+${commentDTO.getUser().getId()}}">-->
-<!--                                    <span th:text="${commentDTO.getUser().getLogin_name()}"></span>-->
-<!--                                </a>-->
-<!--                            </div>-->
-
-<!--                        </div>-->
-<!--                        &lt;!&ndash;                    上为测试数据&ndash;&gt;-->
-<!--                    </div>-->
-
+                    沙雕作者不想写这鬼前端界面了,要看显示的自己用postman<br>
+                    get 相对路径： <span th:text="${'/comment/'+commentDTO.id}"/>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
                         <div class="col-lg-12">
                             <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12 col-xs-12"></div>
@@ -154,6 +142,14 @@
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
                 <h4>相关问题</h4>
+                <div th:each="quest:${relatedQuest}">
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            <a th:href="@{'/question/'+${quest.getId()}}" th:text="${quest.getTitle() }"></a>
+                        </h4>
+                        <a th:href="@{'/question/'+${quest.getId()}}"></a>
+                    </div>
+                </div>
             </div>
         </div>
         <!--        右边的东西-->
