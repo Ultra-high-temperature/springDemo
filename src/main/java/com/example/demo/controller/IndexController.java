@@ -1,8 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.PaginationDTO;
+import com.example.demo.dto.ResultDTO;
+import com.example.demo.exception.CustomErrorCode;
+import com.example.demo.exception.CustomException;
 import com.example.demo.mapper.UserMapper;
+import com.example.demo.model.Permission;
 import com.example.demo.model.User;
+import com.example.demo.service.PermissionService;
 import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,28 +24,24 @@ public class IndexController {
     @Autowired
     private QuestionService questionService;
     @Autowired
-    private UserMapper userMapper;
+    private PermissionService permissionService;
 
     @GetMapping("/")
     public String index(
             HttpServletRequest request,
                         Model model,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
-                        @RequestParam(name = "size", defaultValue = "5") Integer size) {
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null)
-//            for (Cookie cookie : cookies) {
-//                if (cookie.getName().equals("token")) {
-//                    String token = cookie.getValue();
-//                    User user = userMapper.findByToken(token);
-//                    if (user != null) {
-//                        request.getSession().setAttribute("user", user);
-//                        //将User对象放入Session
-//                    }
-//                    break;
-//                }
-//            }
-        PaginationDTO paginationDTO = questionService.list(page, size);//两个无意义参数
+                        @RequestParam(name = "size", defaultValue = "5") Integer size,
+                        @RequestParam(name = "search", required = false) String search) {
+
+        User user = (User) request.getSession().getAttribute("user");
+        if(user!=null){
+            Permission userPermissionInfo = permissionService.findPermissionInfo(user.getId());
+            if(userPermissionInfo.getPermissions()>1){
+                model.addAttribute("PermissionRank", userPermissionInfo.getPermissions());
+            }
+        }
+        PaginationDTO paginationDTO = questionService.list(search,page, size);//后两个为无意义参数
         model.addAttribute("paginationDTO", paginationDTO);
         return "index";
     }

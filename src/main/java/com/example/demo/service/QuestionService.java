@@ -8,6 +8,7 @@ import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Question;
 import com.example.demo.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,24 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public PaginationDTO list(Integer page, Integer size) {//函数的两个参数是用于实现页面分页功能的，但是现在不做了
+    public PaginationDTO list(String search, Integer page, Integer size) {//函数的两个参数是用于实现页面分页功能的，但是现在不做了
         Integer offset = size * (page - 1);
-        List<Question> questionList = questionMapper.list(offset, size);//两个参数无无意义
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        List<Question> questionList = null;
+        if (StringUtils.isBlank(search)) {
+            questionList = questionMapper.list(offset, size);//两个参数无无意义
+        }
+        else {
+            String[] searchs = search.split(" ");
+            String collect = Arrays.stream(searchs).collect(Collectors.joining("|"));
+            try {
+                questionList = questionMapper.list2(collect,offset, size);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
+
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
         PaginationDTO paginationDTO = new PaginationDTO();
         for (Question question : questionList) {
             User user = userMapper.findByID(question.getCreator());
@@ -52,7 +66,7 @@ public class QuestionService {
 
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.getById(id);
-        if(question==null){
+        if (question == null) {
             throw new CustomException(CustomErrorCode.QUESTION_NOT_FOUND);
         }
         BeanUtils.copyProperties(question, questionDTO);
@@ -62,25 +76,30 @@ public class QuestionService {
     }
 
     public void createOrUpdate(Question question) {
-        if(question.getId()==null){//新增
+        if (question.getId() == null) {//新增
             question.setGmt_create(System.currentTimeMillis());
             question.setGmt_modified(question.getGmt_create());
             questionMapper.create(question);
-        }
-        else {//更新
+        } else {//更新
             question.setGmt_modified(System.currentTimeMillis());
             questionMapper.update(question);
         }
     }
+
     public void incView(Integer id) {
         questionMapper.updateView(id);
     }
     //当一个请求需要组装Question和User时，就需要Service充当中间层
 
-    public List<QuestionDTO> findRelatedQuestion(String tags){
+    public List<QuestionDTO> findRelatedQuestion(String tags) {
         String[] split = tags.split(";");
-        String collect = Arrays.stream(split).collect(Collectors.joining("||"));
-        List<QuestionDTO> aboutQuestByTag =questionMapper.findAboutQuestion( "Spring|Java" );
+        String collect = Arrays.stream(split).collect(Collectors.joining("|"));
+        List<QuestionDTO> aboutQuestByTag = null;
+        try {
+            aboutQuestByTag = questionMapper.findAboutQuestion(collect);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return aboutQuestByTag;
     }
 }

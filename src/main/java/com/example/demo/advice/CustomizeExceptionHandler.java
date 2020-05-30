@@ -35,7 +35,6 @@ public class CustomizeExceptionHandler {
                 PrintWriter writer = response.getWriter();
                 writer.write(JSON.toJSONString(resultDTO));
                 writer.close();
-
             } catch (IOException ex) {
             }
             return null;

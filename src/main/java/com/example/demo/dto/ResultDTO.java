@@ -1,10 +1,7 @@
 package com.example.demo.dto;
 
-import com.example.demo.advice.CustomizeExceptionHandler;
 import com.example.demo.exception.CustomErrorCode;
 import com.example.demo.exception.CustomException;
-
-import java.util.List;
 
 public class ResultDTO<T> {
     private Integer code;

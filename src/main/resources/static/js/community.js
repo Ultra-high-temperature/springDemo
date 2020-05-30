@@ -30,10 +30,8 @@ function post() {
         dataType: "json"
     });
 }
-
 //提交回复2
 function comment(e) {
-
     var commentId = e.getAttribute("data-id");
     console.log(commentId);
     var inputId = '#input-' + commentId;
@@ -69,20 +67,16 @@ function comment(e) {
         dataType: "json"
     });
 }
-
-
 //展开回复
 function collapseComments(e) {
     var id = e.getAttribute("data-id");
     console.log(id);
     var comment = $('#comment-' + id)
-
     var collapse = e.getAttribute("data-collapse");
     if (collapse != null) {
         //折叠二级评论
         e.removeAttribute("data-collapse");
         comment.removeClass("in");
-
     } else {
         $.getJSON("/comment/" + id, function (data) {
             console.log(data);
@@ -95,11 +89,17 @@ function collapseComments(e) {
                 subCommentContainer.append(c);
             });
         });
-
         //展开二级评论
         comment.addClass("in");
         //标记二级评论展开状态
         e.setAttribute("data-collapse", "in");
+    }
+}
 
+function addTag(value) {
+    var previous = $('#tag').val();
+    if(previous.indexOf(value)==-1){
+        var v=previous+value+';'
+        $('#tag').val(v);
     }
 }

@@ -1,9 +1,14 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.QuestionDTO;
+import com.example.demo.dto.ResultDTO;
+import com.example.demo.exception.CustomErrorCode;
+import com.example.demo.exception.CustomException;
 import com.example.demo.mapper.QuestionMapper;
+import com.example.demo.model.Permission;
 import com.example.demo.model.Question;
 import com.example.demo.model.User;
+import com.example.demo.service.PermissionService;
 import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +27,10 @@ public class PublishController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private PermissionService permissionService;
+
+
     @GetMapping("/publish")
     public String publish() {
         return "publish";
@@ -32,10 +41,10 @@ public class PublishController {
             Model model,
             @PathVariable(name = "id") Integer id) {
         QuestionDTO question = questionService.getById(id);
-        model.addAttribute("title",question.getTitle());
-        model.addAttribute("description",question.getDescription());
-        model.addAttribute("tag",question.getTag());
-        model.addAttribute("id",question.getId());
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("id", question.getId());
         return "publish";
     }
 
@@ -44,13 +53,17 @@ public class PublishController {
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("tag") String tag,
-            @RequestParam(value = "id",required = false) Integer id,
+            @RequestParam(value = "id", required = false) Integer id,
             HttpServletRequest request,
             Model model) {
-        User user= (User) request.getSession().getAttribute("user");
+        User user = (User) request.getSession().getAttribute("user");
+        Permission userPermissionInfo = permissionService.findPermissionInfo(user.getId());
         if (user == null) {
             model.addAttribute("error", "you have not login");
             return "publish";
+        }
+        if(userPermissionInfo.getBantime()!=null){
+            throw new CustomException(CustomErrorCode.Banned_in);
         }
         Question question = new Question();
         question.setTag(tag);
@@ -61,6 +74,14 @@ public class PublishController {
         question.setId(id);
         //根据ID是否存在决定是新增还是更新question
         questionService.createOrUpdate(question);
-        return "redirect:/";
+        //缺乏应有的返回值，新发布帖子时无法根据帖子id进行重定向。
+        String tieUrl;
+        if ("".equals(id) || id == null) {
+            tieUrl = "redirect:/";
+        }
+        else {
+            tieUrl = "redirect:/question/"+id;
+        }
+        return tieUrl;
     }
 }

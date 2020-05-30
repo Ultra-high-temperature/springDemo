@@ -21,6 +21,8 @@ public interface CommentMapper {
     @Select("select * from comment where parent_id=#{parent_id}")
     List<Comment> findByParentId(Integer parent_id);
 
+//    @Select("select * from comment where parent_id=#{parent_id}")
+
     //private Long id;
     //    private Long parent_id;
     //    private int type;

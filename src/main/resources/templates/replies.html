@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>回复中心</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/demo.css">
+
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+
+<div th:insert="~{navigation :: copy}"></div>
+<!--把标题栏引入进来-->
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-home" aria-hidden="true"></span>个人界面</h2>
+            <hr>
+            <div>
+                未读消息：
+                <div class="media" th:each="notice:${noticeList}">
+                    <div class="media-body" th:if="${notice.getStatus()==0}">
+                        <h4 class="media-heading">
+                            <a th:href="@{'/profile/'+${notice.getNotifier().getId()}}">
+                                <span th:text="${notice.getNotifier().getLogin_name()}"></span><br></a><span th:if="${notice.getType()}==1" th:text="回复了你的问题"/><span th:if="${notice.getType()}==2" th:text="回复了你的评论"/>
+                        </h4>
+                        所在主题：<a th:href="@{'/question/'+${notice.getOuterId()}+'/?noticeId='+${notice.getId()}}"
+                                th:text="${notice.getOuterTitle()}"></a><br>
+                        <span class="text-desc">
+                        <span class="hidden" th:name="notice_id" th:value="${notice.getId()}"></span>
+                        回复时间: <span th:text="${#dates.format(notice.getGmt_create(),'yyyy-MM-dd HH:mm')}"></span>
+                    </span>
+                    </div>
+                </div>
+                <hr>
+                <hr>
+                已读消息:
+                <div class="media" th:each="notice:${noticeList}">
+                    <div class="media-body" th:if="${notice.getStatus()==1}">
+                        <h4 class="media-heading">
+                            <a th:href="@{'/profile/'+${notice.getNotifier().getId()}}">
+                                <span th:text="${notice.getNotifier().getLogin_name()}"></span><br></a><span th:if="${notice.getType()}==1" th:text="回复了你的问题"/><span th:if="${notice.getType()}==2" th:text="回复了你的评论"/>
+                        </h4>
+                        所在主题：<a th:href="@{'/question/'+${notice.getOuterId()}}"
+                                th:text="${notice.getOuterTitle()}"></a><br>
+                        <span class="text-desc">
+                        <span class="hidden" th:name="notice_id" th:value="${notice.getId()}"></span>
+                        回复时间: <span th:text="${#dates.format(notice.getGmt_create(),'yyyy-MM-dd HH:mm')}"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+            <h3>右边的功能模块</h3><br>
+            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+                <hr>
+            </div>
+            <div class="list-group">
+                <a href="" class="list-group-item active">功能模块</a>
+            </div>
+            <div class="list-group">
+                <a th:href="@{'/profile/'+${session.user.getId()}}" class="list-group-item ">发帖记录</a>
+                <a th:href="@{'/profile/'+${session.user.getId()}+'/info/'}" class="list-group-item ">个人信息</a>
+                <a th:href="@{'/profile/'+${session.user.getId()}+'/replies/'}" class="list-group-item active">回复列表</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

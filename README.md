@@ -13,6 +13,9 @@ fastjson<br>
  上行为IndexController内的代码,主要是为了在后端实现分页功能,但现在分页功能不做了，传入的两个参数已无实际作用，望周知。
 
 [spring拦截器文档](https://docs.spring.io/spring/docs/5.0.3.RELEASE/spring-framework-reference/web.html#spring-web)
-
+[mybatis+spring boot文档](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
 [mybatis generator文档](http://mybatis.org/generator/configreference/table.html)
 mvn -Dmybatis.generator.overwrite = true mybatis-generator：generate
+mybatis.generator.overwrite = true
+
+mvn mybatis-generator:generate

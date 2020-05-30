@@ -21,32 +21,30 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 col-xs-12">
             <h2><span class="glyphicon glyphicon-home" aria-hidden="true"></span>个人界面</h2>
             <hr>
-            <div th:each="question:${questions}">
-                <div class="media-left" th:width="30" th:high="30" >
-                    <img class="media-object" src="" alt="">此处<br>有图
-                </div>
+            <div>
                 <div class="media-body">
                     <h4 class="media-heading">
-                        <a th:href="@{'/question/'+${question.getId()}}" th:text="${question.getTitle() }"></a>
+                        用户名<span th:text="${session.user.getLogin_name()}"/>
                     </h4>
-                    <a th:href="@{'/question/'+${question.getId()}}"></a>
-                    <span th:class="line-limit-length" th:text="${question.getDescription()}"></span><br>
-                    <span class="text-desc">
-                        发布时间: <span th:text="${#dates.format(question.gmt_create,'yyyy-MM-dd HH:mm')}"></span>
-                    </span>
+                    当前登录IP：<span th:class="line-limit-length" th:text="${ip}"></span><br>
+                    GitHub帐户ID: <span th:text="${session.user.getAccount_id()}"></span>
+                    账号创建时间: <span th:text="${#dates.format(session.user.getGmt_create(),'yyyy-MM-dd HH:mm')}"></span>
+
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 col-xs-12">
             <h3>右边的功能模块</h3><br>
-            <hr class="col-lg-3 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 col-xs-12">
+                <hr >
+            </div>
             <div class="list-group">
                 <a href="" class="list-group-item active">功能模块</a>
             </div>
             <div class="list-group">
-                <a th:href="@{'/profile/'+${session.user.getId()}}" class="list-group-item active">发帖记录</a>
-                <a th:href="@{'/profile/'+${session.user.getId()}+'/info/'}" class="list-group-item">个人信息</a>
-                <a th:href="@{'/profile/'+${session.user.getId()}+'/replies/'}" class="list-group-item">回复列表</a>
+                <a th:href="@{'/profile/'+${session.user.getId()}}" class="list-group-item ">发帖记录</a>
+                <a th:href="@{'/profile/'+${session.user.getId()}+'/info/'}" class="list-group-item active">个人信息</a>
+                <a th:href="@{'/profile/'+${session.user.getId()}+'/replies/'}" class="list-group-item active">回复列表</a>
             </div>
         </div>
     </div>

@@ -11,7 +11,8 @@ import java.util.List;
 
 @Mapper
 public interface QuestionMapper {
-    @Insert("INSERT INTO question(title, description, gmt_create, gmt_modified, creator, comment_count, tag) VALUES (#{title}, #{description}, #{gmt_create}, #{gmt_modified}, #{creator}, #{comment_count}, #{tag})")
+    @Insert("INSERT INTO question(title, description, gmt_create, gmt_modified, creator, comment_count, tag)" +
+            " VALUES (#{title}, #{description}, #{gmt_create}, #{gmt_modified}, #{creator}, #{comment_count}, #{tag})")
     public void create(Question question);
 
 //    @Select("select * from question limit #{offset},#{size}")//带分页的版本
@@ -36,4 +37,10 @@ public interface QuestionMapper {
 
     @Select("SELECT * FROM question WHERE tag REGEXP #{split}")
     List<QuestionDTO> findAboutQuestion(String split);
+
+    @Select("select * from question WHERE title REGEXP #{collect} order by gmt_modified desc")
+    List<Question> list2(String collect, Integer offset, Integer size);
+
+    @Select("select * from question WHERE creator=#{action}")
+    List<Question> findQuestionByUserId(String action);
 }

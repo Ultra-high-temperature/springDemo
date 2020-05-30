@@ -8,6 +8,7 @@ public enum CustomErrorCode implements ICustomErrorCode{
     TYPE_PARAM_WRONG(2004,"评论类型错误"),
     COMMENT_NOT_FOUND(2005,"评论不存在"),
     CONTENT_IS_EMPTY(2006,"评论内容为空"),
+    Banned_in(2007,"处于封禁中"),
     ;
 
     private Integer code;

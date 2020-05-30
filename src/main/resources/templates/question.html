@@ -99,8 +99,9 @@
             <!--            回复列表-->
 
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12" th:id="comment_section">
-                <div class="media" th:if="${session.user!=null}">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12"
+                 th:if="${session.user!=null&&banInfo!='Banned_In'}" th:id="comment_section">
+                <div class="media" >
                     <div class="media-left media-middle">
                         <img class="media-object" src="..."><!--图片没配置-->
                     </div>
@@ -142,6 +143,7 @@
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-xs-12">
                 <h4>相关问题</h4>
+                <hr>
                 <div th:each="quest:${relatedQuest}">
                     <div class="media-body">
                         <h4 class="media-heading">
@@ -149,6 +151,7 @@
                         </h4>
                         <a th:href="@{'/question/'+${quest.getId()}}"></a>
                     </div>
+                    <hr>
                 </div>
             </div>
         </div>
